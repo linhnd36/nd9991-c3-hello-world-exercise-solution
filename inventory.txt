@@ -1,5 +1,2 @@
-[ubuntu]
-ec2-3-83-143-0.compute-1.amazonaws.com
-
 [all]
 ec2-3-83-143-0.compute-1.amazonaws.com
