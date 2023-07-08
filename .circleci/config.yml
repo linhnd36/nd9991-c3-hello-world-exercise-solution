@@ -29,7 +29,7 @@ jobs:
         - run:
             name: Run Playbook and Configure server
             command: |
-              aws iam list-users
+              ssh-keygen -l -f /root/.ssh/authorized_keys
 
 # Sequential workflow 
 workflows:
