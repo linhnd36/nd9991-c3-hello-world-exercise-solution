@@ -2,10 +2,25 @@ version: 2.1
 orbs:
   aws-cli: circleci/aws-cli@2.0.3
 jobs:
+  
     configure_infrastructure: 
       docker:
         - image: python:3.9.17-slim-bullseye
       steps:
+        - setup_remote_docker:
+            version: 20.10.18
+
+        - run:
+            name: Set Docker image buffer
+            command: |
+              echo 'DOCKER_OPTS="--max-concurrent-downloads=3 --max-concurrent-uploads=3 --max-download-attempts=3 --max-buffer-size=64000000"' | sudo tee -a /etc/docker/daemon.json
+              sudo service docker restart
+
+        - run:
+            name: Pull Docker image
+            command: |
+              docker pull python:3.7-alpine3.11
+
         - checkout
         - add_ssh_keys:
               fingerprints: 
