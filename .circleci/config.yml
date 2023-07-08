@@ -25,7 +25,11 @@ jobs:
         - run:
             name: Install Ansible
             command: |
+              apk update && \
+              apk add --no-cache \
+              openssh-keygen \
               apk add --update ansible
+
         - run:
             name: Run Playbook and Configure server
             command: |
