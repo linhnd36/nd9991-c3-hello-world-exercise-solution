@@ -27,7 +27,7 @@ jobs:
             command: |
               apk update && \
               apk add --no-cache \
-              openssh-keygen \
+              openssh-keygen && \
               apk add --update ansible
 
         - run:
