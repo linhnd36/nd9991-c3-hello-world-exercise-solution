@@ -17,7 +17,7 @@ jobs:
       - run:
           name: Run Playbook and Configure server
           command: |
-            ansible-playbook -i inventory.txt main4.yml --private-key LinhND54.pem
+            ansible-playbook -i inventory.txt main4.yml
 workflows:
     myWorkflow:
       jobs:
