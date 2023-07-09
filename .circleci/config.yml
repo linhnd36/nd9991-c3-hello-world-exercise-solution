@@ -4,6 +4,15 @@ version: 2.1
 orbs:
   aws-cli: circleci/aws-cli@2.0.3
 jobs:
+  check_aws_auth:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - run:
+          name: Check authen aws
+          command: |
+            aws s3 ls
+
   create_and_deploy_front_end:
     docker:
       - image: amazon/aws-cli
@@ -81,7 +90,7 @@ workflows:
     jobs:
       # - create_infrastructure
       # - configure_infrastructure
-      # - smoke_test
+      - check_aws_auth
       - create_and_deploy_front_end
       - promote_to_production:
           requires: 
