@@ -4,15 +4,6 @@ version: 2.1
 orbs:
   aws-cli: circleci/aws-cli@2.0.3
 jobs:
-  check_aws_auth:
-    docker:
-      - image: amazon/aws-cli
-    steps:
-      - run:
-          name: Check authen aws
-          command: |
-            aws sts get-caller-identity --output text
-
   create_and_deploy_front_end:
     docker:
       - image: amazon/aws-cli
@@ -90,19 +81,12 @@ workflows:
     jobs:
       # - create_infrastructure
       # - configure_infrastructure
-      - check_aws_auth
-      - create_and_deploy_front_end:
-          requires:
-            - check_aws_auth
+      - create_and_deploy_front_end
       - promote_to_production:
           requires: 
             - create_and_deploy_front_end
-            - check_aws_auth
-      - get_last_deployment_id:
-          requires:
-            - check_aws_auth
+      - get_last_deployment_id
       - clean_up_old_front_end:
           requires:
             - get_last_deployment_id
             - promote_to_production
-            - check_aws_auth
