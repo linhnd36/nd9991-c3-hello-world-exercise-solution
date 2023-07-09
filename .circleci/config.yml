@@ -5,30 +5,49 @@ orbs:
   aws-cli: circleci/aws-cli@2.0.3
 jobs:
   # Exercise: Config and Deployment
-  configure_infrastructure: 
+  # configure_infrastructure: 
+  #   docker:
+  #     - image: python:3.7-alpine3.11
+  #   steps:
+  #     - checkout
+  #     - add_ssh_keys:
+  #         fingerprints: 
+  #           - "c5:e0:9c:5c:a8:12:a7:77:68:55:06:f5:98:9a:ea:b0"
+  #     - run:
+  #         name: Install Ansible
+  #         command: |
+  #           # install the dependencies needed for your playbook
+  #           apk add --update ansible 
+  #     - run:
+  #         name: Check version ansible --version
+  #         command: |
+  #           ansible --version
+  #     - run:
+  #         name: Run Playbook and Configure server
+  #         command: |
+  #           ansible-playbook -i inventory.txt main.yml
+
+# Exercise: Smoke Testing
+  smoke_test:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: alpine:latest
     steps:
-      - checkout
-      - add_ssh_keys:
-          fingerprints: 
-            - "c5:e0:9c:5c:a8:12:a7:77:68:55:06:f5:98:9a:ea:b0"
+      - run: apk add --update curl
       - run:
-          name: Install Ansible
+          name: smoke test
           command: |
-            # install the dependencies needed for your playbook
-            apk add --update ansible 
-      - run:
-          name: Check version ansible --version
-          command: |
-            ansible --version
-      - run:
-          name: Run Playbook and Configure server
-          command: |
-            ansible-playbook -i inventory.txt main.yml
+            URL="https://blog.udacity.com/"
+            # Test if website exists
+            if curl -s --head ${URL} 
+            then
+              return 0
+            else
+              return 1
+            fi
 workflows:
   # Name the workflow "welcome"
   my_workflow:
     # Run the welcome/run job in its own container
     jobs:
       - configure_infrastructure
+      - smoke_test
