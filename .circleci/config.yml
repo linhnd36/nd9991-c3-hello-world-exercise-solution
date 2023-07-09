@@ -11,7 +11,7 @@ jobs:
       - run:
           name: Check authen aws
           command: |
-            aws s3 ls
+            aws sts get-caller-identity --output text
 
   create_and_deploy_front_end:
     docker:
@@ -91,12 +91,18 @@ workflows:
       # - create_infrastructure
       # - configure_infrastructure
       - check_aws_auth
-      - create_and_deploy_front_end
+      - create_and_deploy_front_end:
+          requires:
+            - check_aws_auth
       - promote_to_production:
           requires: 
             - create_and_deploy_front_end
-      - get_last_deployment_id
+            - check_aws_auth
+      - get_last_deployment_id:
+          requires:
+            - check_aws_auth
       - clean_up_old_front_end:
           requires:
             - get_last_deployment_id
             - promote_to_production
+            - check_aws_auth
